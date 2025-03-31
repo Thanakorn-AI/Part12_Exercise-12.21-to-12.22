@@ -116,7 +116,7 @@ For the development environment, you can use MongoDB Atlas if preferred by updat
      {
        "username": "testuser",
        "name": "Test User",
-       "password": "testpassword"
+       "password": "password123"
      }
      ```
 4. Log in with the new credentials at http://localhost:80.
