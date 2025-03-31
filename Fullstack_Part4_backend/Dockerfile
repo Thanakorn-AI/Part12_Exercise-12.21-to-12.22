@@ -1,3 +1,4 @@
+# Part12_Exercise-12.21-to-12.22/Fullstack_Part4_backend/Dockerfile
 FROM node:20-alpine
 
 WORKDIR /usr/src/app

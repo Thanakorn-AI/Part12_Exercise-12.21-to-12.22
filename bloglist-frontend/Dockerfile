@@ -1,3 +1,4 @@
+# Part12_Exercise-12.21-to-12.22/bloglist-frontend/Dockerfile
 FROM node:20 AS build-stage
 
 WORKDIR /usr/src/app
