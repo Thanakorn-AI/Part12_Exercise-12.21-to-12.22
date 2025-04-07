@@ -1,0 +1,50 @@
+# Part12_Exercise-12.21-to-12.22/docker-compose.yml
+services:
+  frontend:
+    image: bloglist-frontend-prod
+    build:
+      context: ./bloglist-frontend
+      dockerfile: Dockerfile
+    container_name: bloglist-frontend-prod
+    volumes:
+      - frontend-static:/usr/share/nginx/html  # Share the static files via a volume
+    entrypoint: ["true"]  # Override the default entrypoint to exit immediately after build
+
+  backend:
+    image: bloglist-backend-prod
+    build:
+      context: ./Fullstack_Part4_backend
+      dockerfile: Dockerfile
+    container_name: bloglist-backend-prod
+    env_file:
+      - ./Fullstack_Part4_backend/.env
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_DATABASE: Fullstack_part4
+    volumes:
+      - mongo-data:/data/db
+    container_name: bloglist-mongo-prod
+    restart: always
+
+  nginx:
+    image: nginx:1.25-alpine
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - frontend-static:/usr/share/nginx/html:ro  # Mount the shared volume
+    ports:
+      - 80:80
+    container_name: bloglist-nginx-prod
+    depends_on:
+      - frontend
+      - backend
+    restart: always
+
+volumes:
+  mongo-data:
+  frontend-static:  # Define the shared volume

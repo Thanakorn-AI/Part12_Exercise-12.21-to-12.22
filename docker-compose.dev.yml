@@ -1,0 +1,51 @@
+# Part12_Exercise-12.21-to-12.22/docker-compose.dev.yml
+services:
+  frontend:
+    image: bloglist-frontend-dev
+    build:
+      context: ./bloglist-frontend
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./bloglist-frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    container_name: bloglist-frontend-dev
+    environment:
+      - VITE_BACKEND_URL=/api
+
+  backend:
+    image: bloglist-backend-dev
+    build:
+      context: ./Fullstack_Part4_backend
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./Fullstack_Part4_backend:/usr/src/app
+      - /usr/src/app/node_modules
+    container_name: bloglist-backend-dev
+    env_file:
+      - ./Fullstack_Part4_backend/.env
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_DATABASE: Fullstack_part4
+    volumes:
+      - mongo-data:/data/db
+    container_name: bloglist-mongo-dev
+
+  nginx:
+    image: nginx:1.25-alpine
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    container_name: bloglist-nginx-dev
+    depends_on:
+      - frontend
+      - backend
+
+volumes:
+  mongo-data:
